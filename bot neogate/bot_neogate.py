@@ -4,7 +4,8 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
 
 load_dotenv()
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = "7713512345:AAEF-UfSbtpPtH8wtFyhRbBKPQj8R91LIIk"
+
 
 locked_features = ["wallets", "filters", "buy_mode", "listings"]
 
