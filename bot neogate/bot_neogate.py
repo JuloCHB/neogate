@@ -7,23 +7,23 @@ load_dotenv()
 TOKEN = "7713512345:AAEF-UfSbtpPtH8wtFyhRbBKPQj8R91LIIk"
 
 # 🔐 Features that require purchase
-locked_features = ["wallets", "auto_buy", "filters", "buy_mode", "listings"]
+locked_features = ["wallets", "filters", "buy_mode", "listings"]
 
-# Temp user settings (could be per-user later)
 user_settings = {
     "lang": "🇺🇸 American",
     "buy_mode": "Node",
     "sell_mode": "Node",
     "buy_mev": "OFF",
     "sell_mev": "OFF",
-    "awaiting_license": False  # pour savoir si on attend un code
+    "auto_buy": "OFF",
+    "awaiting_license": False
 }
 
-# 🟩 Main Menu
 def main_menu():
+    auto_buy_icon = "✅" if user_settings["auto_buy"] == "ON" else "❌"
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("👛 Wallets", callback_data='wallets'), InlineKeyboardButton("💼 Positions", callback_data='positions')],
-        [InlineKeyboardButton("🤖 Auto Buy", callback_data='auto_buy'), InlineKeyboardButton("📈 Buy Mode", callback_data='buy_mode')],
+        [InlineKeyboardButton(f"🤖 Auto Buy {auto_buy_icon}", callback_data='auto_buy'), InlineKeyboardButton("📈 Buy Mode", callback_data='buy_mode')],
         [InlineKeyboardButton("📊 DEX / CEX Filters", callback_data='filters'), InlineKeyboardButton("📡 Listings Live", callback_data='listings')],
         [InlineKeyboardButton("🔔 Notifications", callback_data='notifications'), InlineKeyboardButton("🧾 Logs", callback_data='logs')],
         [InlineKeyboardButton("⚙️ Settings", callback_data='settings'), InlineKeyboardButton("🔄 Refresh", callback_data='refresh')],
@@ -31,7 +31,6 @@ def main_menu():
         [InlineKeyboardButton("❌ Close", callback_data='close')]
     ])
 
-# ⚙️ Settings Menu
 def settings_menu():
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(f"🌐 Language: {user_settings['lang']}", callback_data='lang')],
@@ -42,7 +41,6 @@ def settings_menu():
         [InlineKeyboardButton("⬅️ Back", callback_data='back_to_main')]
     ])
 
-# 🌐 Language selection
 def language_menu():
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("🇺🇸 American", callback_data='lang_en')],
@@ -51,7 +49,6 @@ def language_menu():
         [InlineKeyboardButton("⬅️ Back", callback_data='settings')]
     ])
 
-# 🔔 Notifications submenu
 def notifications_menu():
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("📢 All listings", callback_data='notif_all')],
@@ -61,7 +58,6 @@ def notifications_menu():
         [InlineKeyboardButton("⬅️ Back", callback_data='back_to_main')]
     ])
 
-# 🟩 Start Message
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_settings["awaiting_license"] = False
     text = (
@@ -72,7 +68,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text(text, parse_mode='Markdown', reply_markup=main_menu())
 
-# 🔁 Helper: cycle values
 def cycle_option(current, options):
     i = options.index(current)
     return options[(i + 1) % len(options)]
@@ -80,11 +75,10 @@ def cycle_option(current, options):
 def toggle(value):
     return "ON" if value == "OFF" else "OFF"
 
-# 🔐 License code handler
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if user_settings.get("awaiting_license"):
         code = update.message.text.strip()
-        if code == "NEOGATE123":  # 🔑 code de démo
+        if code == "NEOGATE123":
             user_settings["awaiting_license"] = False
             await update.message.reply_text("✅ License activated successfully!", reply_markup=main_menu())
         else:
@@ -92,7 +86,6 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text("Type /start to begin.")
 
-# 🎯 Handle Button Clicks
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -100,6 +93,15 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "activate":
         user_settings["awaiting_license"] = True
         await query.edit_message_text("🔑 *Enter your license code below:*", parse_mode="Markdown")
+        return
+
+    if query.data == "auto_buy":
+        user_settings["auto_buy"] = toggle(user_settings["auto_buy"])
+        await query.edit_message_text(
+            f"🤖 Auto Buy is now *{user_settings['auto_buy']}*",
+            parse_mode="Markdown",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")]])
+        )
         return
 
     if query.data in locked_features:
@@ -169,7 +171,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await query.edit_message_text("⚠️ Unknown action.", reply_markup=main_menu())
 
-# 🚀 Launch bot
+# 🚀 Launch
 if __name__ == '__main__':
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
