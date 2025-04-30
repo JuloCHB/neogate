@@ -150,11 +150,25 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "notif_filtered": "🎯 You'll only get alerts matching your filters.",
         "notif_bought": "🤖 Only listings you've bought will trigger alerts.",
         "notif_none": "🔕 All notifications disabled.",
-        "back_to_main": "👋 Back to main menu."
+        "back_to_main": "👋 Back to main menu.",
+        "wallets": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate.io](https://www.neogate.io)",
+        "filters": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate.io](https://www.neogate.io)",
+        "listings": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate.io](https://www.neogate.io)",
+        "notifications": "🔔 *Notification preferences:*\n\nSelect when you want to be notified:",
+        "settings": "⚙️ *Settings:*"
     }
 
     if query.data in responses:
-        await query.edit_message_text(responses[query.data], reply_markup=main_menu())
+        text = responses[query.data]
+        if query.data in locked_features:
+            await query.edit_message_text(text, parse_mode='Markdown', disable_web_page_preview=True,
+                                          reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")]]))
+        elif query.data == "notifications":
+            await query.edit_message_text(text, parse_mode='Markdown', reply_markup=main_menu())
+        elif query.data == "settings":
+            await query.edit_message_text(text, parse_mode='Markdown', reply_markup=main_menu())
+        else:
+            await query.edit_message_text(text, reply_markup=main_menu())
         return
 
     # Do nothing for unknown actions
