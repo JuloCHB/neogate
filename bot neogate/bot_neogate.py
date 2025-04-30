@@ -35,17 +35,38 @@ def main_menu():
     ])
 
 def buy_mode_menu():
+    def make_button(label, setting_type, value):
+        selected = user_settings[setting_type]
+        is_selected = selected == value
+        text = f"{label}{' ✅' if is_selected else ''}"
+        return InlineKeyboardButton(text, callback_data=f"{setting_type}_{value}")
+
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("📉 Limit Sell", callback_data='noop')],
-        [InlineKeyboardButton("5%", callback_data='limit_sell_5'), InlineKeyboardButton("10%", callback_data='limit_sell_10'),
-         InlineKeyboardButton("20%", callback_data='limit_sell_20'), InlineKeyboardButton("30%", callback_data='limit_sell_30')],
-        [InlineKeyboardButton("Custom %", callback_data='limit_sell_custom'), InlineKeyboardButton("None", callback_data='limit_sell_none')],
+        [
+            make_button("5%", "limit_sell", "5"),
+            make_button("10%", "limit_sell", "10"),
+            make_button("20%", "limit_sell", "20"),
+            make_button("30%", "limit_sell", "30")
+        ],
+        [
+            make_button("Custom %", "limit_sell", "custom"),
+            make_button("None", "limit_sell", "none")
+        ],
         [InlineKeyboardButton("🛑 Stop Loss", callback_data='noop')],
-        [InlineKeyboardButton("5%", callback_data='stop_loss_5'), InlineKeyboardButton("10%", callback_data='stop_loss_10'),
-         InlineKeyboardButton("20%", callback_data='stop_loss_20'), InlineKeyboardButton("30%", callback_data='stop_loss_30')],
-        [InlineKeyboardButton("Custom %", callback_data='stop_loss_custom'), InlineKeyboardButton("None", callback_data='stop_loss_none')],
+        [
+            make_button("5%", "stop_loss", "5"),
+            make_button("10%", "stop_loss", "10"),
+            make_button("20%", "stop_loss", "20"),
+            make_button("30%", "stop_loss", "30")
+        ],
+        [
+            make_button("Custom %", "stop_loss", "custom"),
+            make_button("None", "stop_loss", "none")
+        ],
         [InlineKeyboardButton("⬅️ Back", callback_data='back_to_main')]
     ])
+
 
 def settings_menu():
     return InlineKeyboardMarkup([
