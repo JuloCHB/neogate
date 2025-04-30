@@ -6,7 +6,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandle
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN") or "7713512345:AAEF-UfSbtpPtH8wtFyhRbBKPQj8R91LIIk"
 
-locked_features = ["wallets", "filters", "buy_mode", "listings"]
+locked_features = ["wallets", "filters", "listings"]
 
 user_settings = {
     "lang": "🇺🇸 American",
@@ -18,6 +18,39 @@ user_settings = {
     "awaiting_license": False
 }
 
+def buy_mode_menu():
+    def make_button(label, setting_type, value):
+        selected = user_settings[setting_type]
+        is_selected = selected == value
+        text = f"{label}{' ✅' if is_selected else ''}"
+        return InlineKeyboardButton(text, callback_data=f"{setting_type}_{value}")
+
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("📉 Limit Sell", callback_data='noop_limit_sell')],
+        [
+            make_button("5%", "limit_sell", "5"),
+            make_button("10%", "limit_sell", "10"),
+            make_button("20%", "limit_sell", "20"),
+            make_button("30%", "limit_sell", "30")
+        ],
+        [
+            make_button("Custom %", "limit_sell", "custom"),
+            make_button("None", "limit_sell", "none")
+        ],
+        [InlineKeyboardButton("🚩 Stop Loss", callback_data='noop_stop_loss')],
+        [
+            make_button("5%", "stop_loss", "5"),
+            make_button("10%", "stop_loss", "10"),
+            make_button("20%", "stop_loss", "20"),
+            make_button("30%", "stop_loss", "30")
+        ],
+        [
+            make_button("Custom %", "stop_loss", "custom"),
+            make_button("None", "stop_loss", "none")
+        ],
+        [InlineKeyboardButton("⬅️ Back", callback_data='back_to_main')]
+    ])
+    
 def main_menu():
     auto_buy_icon = "✅" if user_settings["auto_buy"] == "ON" else "❌"
     return InlineKeyboardMarkup([
