@@ -45,7 +45,6 @@ def notifications_menu():
 
 def settings_menu():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"🌐 Language: {user_settings['lang']}", callback_data='lang')],
         [InlineKeyboardButton(f"💸 Buy Mode: {user_settings['buy_mode']}", callback_data='buy_mode_set')],
         [InlineKeyboardButton(f"💰 Sell Mode: {user_settings['sell_mode']}", callback_data='sell_mode_set')],
         [InlineKeyboardButton(f"🛡 Buy MEV: {user_settings['buy_mev']}", callback_data='buy_mev')],
