@@ -10,7 +10,8 @@ TOKEN = "7713512345:AAEF-UfSbtpPtH8wtFyhRbBKPQj8R91LIIk"
 locked_features = ["wallets", "filters", "listings"]
 
 user_settings = {
-    "lang": "🇺🇸 American","🇨🇳 Chinese","🇪🇸 Spanish",
+    "lang": "🇺🇸 American",
+    "lang_options": ["🇺🇸 American", "🇨🇳 Chinese", "🇪🇸 Spanish"],
     "buy_mode": "Node",
     "sell_mode": "Node",
     "buy_mev": "OFF",
