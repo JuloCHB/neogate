@@ -45,7 +45,11 @@ def notifications_menu():
 
 def settings_menu():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("🌐 Language", callback_data='lang')],
+        [InlineKeyboardButton(f"🌐 Language: {user_settings['lang']}", callback_data='lang')],
+        [InlineKeyboardButton(f"💸 Buy Mode: {user_settings['buy_mode']}", callback_data='buy_mode_set')],
+        [InlineKeyboardButton(f"💰 Sell Mode: {user_settings['sell_mode']}", callback_data='sell_mode_set')],
+        [InlineKeyboardButton(f"🛡 Buy MEV: {user_settings['buy_mev']}", callback_data='buy_mev')],
+        [InlineKeyboardButton(f"🛡 Sell MEV: {user_settings['sell_mev']}", callback_data='sell_mev')],
         [InlineKeyboardButton("⬅️ Back", callback_data='back_to_main')]
     ])
 
@@ -92,9 +96,15 @@ def toggle(value):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_settings["awaiting_license"] = False
     text = (
-        "👋 *Welcome to NeoGate Bot!*\n\n"
-        "🚀 _Get real-time token listings alerts, filters, and auto-trading tools._\n\n"
-        "📘 [X](https://example.com) | 🧵 [Website](https://example.com) | 📺 [Whitepaper](https://example.com)\n\n"
+        "👋 *Welcome to NeoGate Bot!*
+
+"
+        "🚀 _Get real-time token listings alerts, filters, and auto-trading tools._
+
+"
+        "📘 [X](https://example.com) | 🧵 [Website](https://example.com) | 📺 [Whitepaper](https://example.com)
+
+"
         "💡 *Use the menu below to configure and monitor your strategy 👇*"
     )
     await update.message.reply_text(text, parse_mode='Markdown', reply_markup=main_menu())
@@ -150,6 +160,26 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if query.data == "settings":
+        await query.edit_message_text("⚙️ *Settings:*", parse_mode="Markdown", reply_markup=settings_menu())
+        return
+
+    if query.data == "buy_mode_set":
+        user_settings["buy_mode"] = cycle_option(user_settings["buy_mode"], ["Node", "Jito", "Auto"])
+        await query.edit_message_text("⚙️ *Settings:*", parse_mode="Markdown", reply_markup=settings_menu())
+        return
+
+    if query.data == "sell_mode_set":
+        user_settings["sell_mode"] = cycle_option(user_settings["sell_mode"], ["Node", "Jito", "Auto"])
+        await query.edit_message_text("⚙️ *Settings:*", parse_mode="Markdown", reply_markup=settings_menu())
+        return
+
+    if query.data == "buy_mev":
+        user_settings["buy_mev"] = toggle(user_settings["buy_mev"])
+        await query.edit_message_text("⚙️ *Settings:*", parse_mode="Markdown", reply_markup=settings_menu())
+        return
+
+    if query.data == "sell_mev":
+        user_settings["sell_mev"] = toggle(user_settings["sell_mev"])
         await query.edit_message_text("⚙️ *Settings:*", parse_mode="Markdown", reply_markup=settings_menu())
         return
 
