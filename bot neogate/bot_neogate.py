@@ -97,7 +97,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
     "👋 *Welcome to NeoGate Bot!*\n\n"
     "🚀 _Get real-time token listings alerts, filters, and auto-trading tools._\n\n"
-    "🐦 [X](https://x.com/neogate_bot) | 🌐 [Website](https://neogate-bot.io) | 💬 [Discord](https://neogate-bot.io) | 📖 [Guide](https://neogate-1.gitbook.io/neogate)\n\n"
     "💡 *Use the menu below to configure and monitor your strategy 👇*"
 )
     
