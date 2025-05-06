@@ -197,9 +197,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "notif_bought": "🤖 Only listings you've bought will trigger alerts.",
         "notif_none": "🔕 All notifications disabled.",
         "back_to_main": "👋 Back to main menu.",
-        "wallets": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate.io](https://www.neogate.io)",
-        "filters": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate.io](https://www.neogate.io)",
-        "listings": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate.io](https://www.neogate.io)"
+        "wallets": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate-bot.io](https://www.neogate-bot.io/)",
+        "filters": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate-bot.io](https://www.neogate-bot.io/)",
+        "listings": "🔒 *This feature is available for NeoGate members only.*\n\n👉 Buy the tool at [neogate-bot.io](https://www.neogate-bot.io/)"
     }
 
     if query.data in responses:
