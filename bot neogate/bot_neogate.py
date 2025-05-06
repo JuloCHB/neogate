@@ -95,12 +95,12 @@ def toggle(value):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_settings["awaiting_license"] = False
     text = (
-    "👋 *Welcome to NeoGate Bot!*\n\n"
-    "🚀 _Get real-time token listings alerts, filters, and auto-trading tools._\n\n"
-    "💡 *Use the menu below to configure and monitor your strategy 👇*"
-)
-    
-    await update.message.reply_text(text, parse_mode='Markdown', reply_markup=main_menu())
+        "👋 *Welcome to NeoGate Bot!*\n\n"
+        "🚀 _Get real-time token listings alerts, filters, and auto-trading tools._\n\n"
+        "🌐 [X](https://x.com/neogate_bot) | [Website](https://www.neogate-bot.io/) | [💬 Discord](https://discord.com/invite/F6dJc6SN) | [📘 Guide](https://neogate-1.gitbook.io/neogate)\n\n"
+        "💡 *Use the menu below to configure and monitor your strategy 👇*"
+    )
+    await update.message.reply_text(text, parse_mode='Markdown', disable_web_page_preview=True, reply_markup=main_menu())
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if user_settings.get("awaiting_license"):
